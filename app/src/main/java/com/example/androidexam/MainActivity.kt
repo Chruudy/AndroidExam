@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -19,6 +20,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -28,6 +30,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -82,16 +85,19 @@ fun ProductOverview(productUiState: ProductUiState) {
     }
 }
 
-
-
 @Composable
 fun ProductItem(product: Product) {
     Card(
+        colors = CardDefaults.cardColors(
+            containerColor = Color.White),
         modifier = Modifier
             .fillMaxWidth()
             .padding(8.dp)
-            .shadow(4.dp, shape = RoundedCornerShape(8.dp))
-            .background(MaterialTheme.colorScheme.surface)
+            .border(
+                width = 2.dp,
+                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.2f),
+                shape = RoundedCornerShape(8.dp)
+            ),
     ) {
         Row(
             modifier = Modifier.padding(16.dp),
@@ -100,8 +106,7 @@ fun ProductItem(product: Product) {
             // Image on the left
             AsyncImage(
                 modifier = Modifier
-                    .size(120.dp) // Set the size of the image
-                    .clip(RoundedCornerShape(8.dp)),
+                    .size(120.dp), // Set the size of the image
                 model = ImageRequest.Builder(LocalContext.current)
                     .data(product.image)
                     .crossfade(true)
@@ -118,7 +123,7 @@ fun ProductItem(product: Product) {
                 Text(text = product.title, fontWeight = FontWeight.Bold)
                 Spacer(modifier = Modifier.height(4.dp)) // Add spacing between title and category
                 Text(text = product.category)
-                Spacer(modifier = Modifier.height(4.dp)) // Add spacing between category and price
+                Spacer(modifier = Modifier.height(8.dp)) // Add more spacing
                 Text(
                     text = buildAnnotatedString {
                         append("Price: ")
@@ -132,12 +137,6 @@ fun ProductItem(product: Product) {
         }
     }
 }
-
-
-
-
-
-
 
 
 @Composable
