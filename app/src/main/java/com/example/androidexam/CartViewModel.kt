@@ -8,9 +8,9 @@ class CartViewModel : ViewModel() {
     private val _cartItems = MutableStateFlow<List<CartItem>>(emptyList())
     val cartItems: StateFlow<List<CartItem>> = _cartItems
 
-    fun addToCart(product: Product) {
+    fun addToCart(product: Product, quantity: Int) {
         val currentItems = _cartItems.value.toMutableList()
-        currentItems.add(CartItem(product, 1))
+        currentItems.add(CartItem(product, quantity))
         _cartItems.value = currentItems
     }
 

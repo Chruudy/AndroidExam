@@ -26,6 +26,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -195,7 +196,6 @@ fun ProductItem(product: Product, navController: NavHostController) {
     }
 }
 
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun CartView(cartViewModel: CartViewModel, navController: NavHostController) {
     val cartItems by cartViewModel.cartItems.collectAsState(emptyList())
@@ -226,14 +226,23 @@ fun CartView(cartViewModel: CartViewModel, navController: NavHostController) {
 
             val total = cartItems.sumOf { it.product.price * it.quantity }
             Spacer(modifier = Modifier.weight(1f))
-            Text(
-                text = "Total: $$total",
-                fontSize = 20.sp,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(top = 16.dp))
+
+            Button(
+                onClick = {
+                    // Handle the "Place Order" action here
+                    // You can implement the order placement logic here
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp)
+            ) {
+                Text(text = "Place Order - $$total")
             }
         }
     }
+}
+
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -301,7 +310,7 @@ fun CartItemRow(cartItem: CartItem, onRemoveClick: (CartItem) -> Unit) {
                 fontSize = 14.sp,
             )
             Text(
-                text = "$${cartItem.product.price * cartItem.quantity}",
+                text = "$${cartItem.product.price}",
                 fontSize = 14.sp,
             )
         }

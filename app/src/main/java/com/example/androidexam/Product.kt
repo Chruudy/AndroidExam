@@ -20,3 +20,8 @@ data class CartItem(
     val product: Product,
     var quantity: Int
 )
+
+sealed class MenuItem {
+    object None : MenuItem()
+    object OrderHistory : MenuItem()
+}

@@ -14,6 +14,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
@@ -21,6 +23,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -34,14 +37,14 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-
+import androidx.compose.ui.unit.sp
 
 
 val GoldColor = Color(255, 215, 0)
 @Composable
 fun ProductOverview(product: Product, onNavigate: () -> Unit, navController: NavHostController, cartViewModel: CartViewModel) {
     var isAddedToCart by remember { mutableStateOf(false) }
-
+    var selectedQuantity by remember { mutableIntStateOf(1) }
 
     Scaffold(topBar = { TopBar(text = "Product details", navController) }) { innerPadding ->
         Column(
@@ -112,18 +115,66 @@ fun ProductOverview(product: Product, onNavigate: () -> Unit, navController: Nav
 
             Spacer(modifier = Modifier.height(16.dp))
 
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Button(
+                    onClick = {
+                        if (selectedQuantity > 1) {
+                            selectedQuantity--
+                        }
+                    },
+                    modifier = Modifier
+                        .size(40.dp)
+                        .height(40.dp)
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.KeyboardArrowDown, // Use the arrow down icon
+                        contentDescription = "Decrease",
+                        modifier = Modifier.size(24.dp) // Adjust icon size as needed
+                    )
+                }
+                Text(
+                    text = selectedQuantity.toString(),
+                    modifier = Modifier.padding(horizontal = 8.dp)
+                )
+                Button(
+                    onClick = {
+                        selectedQuantity++
+                    },
+                    modifier = Modifier
+                        .size(40.dp)
+                        .height(40.dp)
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.KeyboardArrowUp, // Use the arrow up icon
+                        contentDescription = "Increase",
+                        modifier = Modifier.size(24.dp) // Adjust icon size as needed
+                    )
+                }
+            }
+
+
+
+
+
+            Spacer(modifier = Modifier.height(16.dp))
+
             Button(
                 onClick = {
-                    cartViewModel.addToCart(product) // Add the product to the cart
+                    cartViewModel.addToCart(product, selectedQuantity)
                     isAddedToCart = true
                 },
-                enabled = !isAddedToCart // Disable the button if already added to cart
+                enabled = !isAddedToCart
             ) {
                 Text(text = if (isAddedToCart) "Added to Cart" else "Add to Cart")
             }
         }
     }
 }
+
 
 
 
