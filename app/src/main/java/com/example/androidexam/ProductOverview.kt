@@ -1,5 +1,6 @@
 package com.example.androidexam
 
+import CartViewModel
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -35,10 +36,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 
 
+
 val GoldColor = Color(255, 215, 0)
 @Composable
-fun ProductOverview(product: Product, onNavigate: () -> Unit, navController: NavHostController) {
+fun ProductOverview(product: Product, onNavigate: () -> Unit, navController: NavHostController, cartViewModel: CartViewModel) {
     var isAddedToCart by remember { mutableStateOf(false) }
+
 
     Scaffold(topBar = { TopBar(text = "Product details", navController) }) { innerPadding ->
         Column(
@@ -111,14 +114,12 @@ fun ProductOverview(product: Product, onNavigate: () -> Unit, navController: Nav
 
             Button(
                 onClick = {
+                    cartViewModel.addToCart(product) // Add the product to the cart
                     isAddedToCart = true
-                    // Add logic here to add the product to the cart
                 },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp)
+                enabled = !isAddedToCart // Disable the button if already added to cart
             ) {
-                Text(if (isAddedToCart) "Added to Cart" else "Add to Cart")
+                Text(text = if (isAddedToCart) "Added to Cart" else "Add to Cart")
             }
         }
     }

@@ -21,23 +21,31 @@ fun TopBar(
 ) {
     TopAppBar(
         title = {
-            Text(text = text) },
+            Text(text = text)
+        },
         navigationIcon = {
             if (navController.previousBackStackEntry != null) {
                 IconButton(onClick = { navController.navigateUp() }) {
                     Icon(Icons.Default.ArrowBack, contentDescription = "Back")
                 }
-            } },
+            }
+        },
         actions = {
-            IconButton(onClick = { /* Handle search click */ }) {
+            IconButton(
+                onClick = {
+                    // Navigate to the "cart" destination when the cart icon is clicked
+                    navController.navigate("cart")
+                }
+            ) {
                 Icon(Icons.Default.ShoppingCart, contentDescription = "Cart")
             }
-            IconButton(onClick = { /* Handle menu click */ }) {
+            IconButton(onClick = { /* Handle search click */ }) {
                 Icon(Icons.Default.Menu, contentDescription = "Menu")
             }
         }
     )
 }
+
 
 
 

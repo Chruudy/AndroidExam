@@ -15,3 +15,8 @@ data class Product(
     val image: String,
     val rating: Rating
 )
+
+data class CartItem(
+    val product: Product,
+    var quantity: Int
+)
