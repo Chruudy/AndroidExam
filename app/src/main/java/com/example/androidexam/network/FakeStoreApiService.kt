@@ -7,7 +7,6 @@ import retrofit2.http.GET
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 
-
 private const val BASE_URL =
     "https://fakestoreapi.com/"
 

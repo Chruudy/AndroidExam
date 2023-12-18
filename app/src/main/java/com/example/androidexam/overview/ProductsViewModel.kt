@@ -11,25 +11,19 @@ import kotlinx.coroutines.launch
 import retrofit2.HttpException
 import java.io.IOException
 
-
 sealed interface ProductUiState {
     data class Success(val products: List<Product>) : ProductUiState
     object Error : ProductUiState
     object Loading : ProductUiState
 }
 
-
 class OverviewViewModel : ViewModel() {
-
     var productUiState: ProductUiState by mutableStateOf(ProductUiState.Loading)
         private set
-
     var productList: List<Product> by mutableStateOf(emptyList())
-
     init {
         getProducts()
     }
-
     fun getProducts() {
         viewModelScope.launch {
             productUiState = ProductUiState.Loading

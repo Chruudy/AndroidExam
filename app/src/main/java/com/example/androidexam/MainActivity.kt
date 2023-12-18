@@ -9,8 +9,6 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -63,13 +61,11 @@ import com.example.androidexam.ui.theme.AndroidExamTheme
 import com.example.androidexam.overview.OverviewViewModel
 import androidx.compose.ui.unit.sp
 
-
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             AndroidExamTheme {
-                // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
@@ -90,15 +86,13 @@ class MainActivity : ComponentActivity() {
 fun NavigationController(productUiState: ProductUiState, navController: NavHostController = rememberNavController(), startDestination: String = "product", cartViewModel: CartViewModel) {
     NavHost(navController = navController, startDestination = startDestination) {
         composable("product") {
-            ProductList(productUiState = productUiState, onNavigate = { navController.navigate("product") }, navController = navController)
+            ProductList(productUiState = productUiState, navController = navController)
         }
         composable("product/{productId}", arguments = listOf(navArgument("productId") {
             type = NavType.IntType
-
         })) { backStackEntry ->
             ProductOverview(
                 product = (productUiState as ProductUiState.Success).products[backStackEntry.arguments?.getInt("productId") ?: 0],
-                onNavigate = { navController.navigate("product/{productId}")},
                 navController = navController,
                 cartViewModel = cartViewModel
             )
@@ -106,21 +100,16 @@ fun NavigationController(productUiState: ProductUiState, navController: NavHostC
         composable("cart") {
             CartView(cartViewModel = cartViewModel, navController = navController)
         }
-
-
-
-
     }
 }
 
-
 @Composable
-fun ProductList(productUiState: ProductUiState, onNavigate: () -> Unit, navController: NavHostController) {
+fun ProductList(productUiState: ProductUiState, navController: NavHostController) {
     Scaffold(topBar = { TopBar(text = "Products", navController) }) { innerPadding ->
         when (productUiState) {
             is ProductUiState.Loading -> LoadingScreen()
             is ProductUiState.Success -> {
-                val products = (productUiState as ProductUiState.Success).products
+                val products = productUiState.products
                 Log.d(TAG, "ProductList: ${products.size}")
                 LazyColumn(
                     modifier = Modifier
@@ -136,7 +125,6 @@ fun ProductList(productUiState: ProductUiState, onNavigate: () -> Unit, navContr
         }
     }
 }
-
 
 @Composable
 fun ProductItem(product: Product, navController: NavHostController) {
@@ -156,32 +144,27 @@ fun ProductItem(product: Product, navController: NavHostController) {
                 Log.d(TAG, "ProductItem: ${product.id} ")
             },
     ) {
-
         Row(
             modifier = Modifier.padding(16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            // Image on the left
             AsyncImage(
                 modifier = Modifier
-                    .size(120.dp), // Set the size of the image
+                    .size(120.dp),
                 model = ImageRequest.Builder(LocalContext.current)
                     .data(product.image)
                     .crossfade(true)
                     .build(),
                 contentDescription = "Product image"
             )
-
-            Spacer(modifier = Modifier.width(16.dp)) // Add spacing between image and text
-
-            // Title, Category, and Price to the right of the image
+            Spacer(modifier = Modifier.width(16.dp))
             Column(
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Text(text = product.title, fontWeight = FontWeight.Bold)
-                Spacer(modifier = Modifier.height(8.dp)) // Add spacing between title and category
+                Spacer(modifier = Modifier.height(8.dp))
                 Text(text = product.category)
-                Spacer(modifier = Modifier.height(8.dp)) // Add more spacing
+                Spacer(modifier = Modifier.height(8.dp))
                 Text(
                     text = buildAnnotatedString {
                         append("Price: ")
@@ -199,7 +182,6 @@ fun ProductItem(product: Product, navController: NavHostController) {
 @Composable
 fun CartView(cartViewModel: CartViewModel, navController: NavHostController) {
     val cartItems by cartViewModel.cartItems.collectAsState(emptyList())
-
     Scaffold(
         topBar = {
             TopBarWithBackButton(text = "Cart", navController = navController)
@@ -214,7 +196,6 @@ fun CartView(cartViewModel: CartViewModel, navController: NavHostController) {
             if (cartItems.isEmpty()) {
                 Text(text = "Your cart is empty.")
             } else {
-                // List of cart items
                 LazyColumn {
                     items(cartItems) { cartItem ->
                         CartItemRow(cartItem, onRemoveClick = { itemToRemove ->
@@ -223,14 +204,11 @@ fun CartView(cartViewModel: CartViewModel, navController: NavHostController) {
                     }
                 }
             }
-
             val total = cartItems.sumOf { it.product.price * it.quantity }
             Spacer(modifier = Modifier.weight(1f))
 
             Button(
                 onClick = {
-                    // Handle the "Place Order" action here
-                    // You can implement the order placement logic here
                 },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -241,8 +219,6 @@ fun CartView(cartViewModel: CartViewModel, navController: NavHostController) {
         }
     }
 }
-
-
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -265,8 +241,6 @@ fun TopBarWithBackButton(
     )
 }
 
-
-
 @Composable
 fun CartItemRow(cartItem: CartItem, onRemoveClick: (CartItem) -> Unit) {
     Row(
@@ -278,10 +252,8 @@ fun CartItemRow(cartItem: CartItem, onRemoveClick: (CartItem) -> Unit) {
                 color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.2f),
                 shape = RoundedCornerShape(8.dp)
             ),
-
         verticalAlignment = Alignment.CenterVertically
     ) {
-        // Product image on the left
         AsyncImage(
             modifier = Modifier.size(80.dp),
             model = ImageRequest.Builder(LocalContext.current)
@@ -290,10 +262,7 @@ fun CartItemRow(cartItem: CartItem, onRemoveClick: (CartItem) -> Unit) {
                 .build(),
             contentDescription = "Product image"
         )
-
         Spacer(modifier = Modifier.width(16.dp))
-
-        // Product details in the middle
         Column(
             modifier = Modifier.weight(1f)
         ) {
@@ -302,9 +271,7 @@ fun CartItemRow(cartItem: CartItem, onRemoveClick: (CartItem) -> Unit) {
                 fontWeight = FontWeight.Bold,
                 fontSize = 18.sp,
             )
-
             Spacer(modifier = Modifier.height(8.dp))
-
             Text(
                 text = "Quantity: ${cartItem.quantity}",
                 fontSize = 14.sp,
@@ -314,10 +281,7 @@ fun CartItemRow(cartItem: CartItem, onRemoveClick: (CartItem) -> Unit) {
                 fontSize = 14.sp,
             )
         }
-
         Spacer(modifier = Modifier.width(16.dp))
-
-        // Remove button on the right
         IconButton(
             onClick = { onRemoveClick(cartItem) },
         ) {
@@ -326,26 +290,8 @@ fun CartItemRow(cartItem: CartItem, onRemoveClick: (CartItem) -> Unit) {
     }
 }
 
-
-
-
-
-
-
-
-
-
-
 @Composable
 fun LoadingScreen() {
     Text("loading...")
 }
 
-@Composable
-fun ResultScreen(title: String) {
-    Box(
-        contentAlignment = Alignment.Center,
-    ) {
-        Text(text = title)
-    }
-}

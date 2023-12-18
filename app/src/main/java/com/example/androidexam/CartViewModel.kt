@@ -13,7 +13,6 @@ class CartViewModel : ViewModel() {
         currentItems.add(CartItem(product, quantity))
         _cartItems.value = currentItems
     }
-
     fun removeItemFromCart(itemToRemove: CartItem) {
         val currentItems = _cartItems.value.toMutableList()
         currentItems.remove(itemToRemove)
@@ -21,12 +20,6 @@ class CartViewModel : ViewModel() {
     }
 
 fun getCartItems(): List<CartItem> {
-        // Return the list of cart items
-        return _cartItems.value.orEmpty()
-    }
-
-    fun clearCart() {
-        // Clear the cartItems list
-        _cartItems.value = emptyList()
+        return _cartItems.value
     }
 }

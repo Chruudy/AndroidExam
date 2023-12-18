@@ -12,7 +12,6 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TopBar(
@@ -33,13 +32,13 @@ fun TopBar(
         actions = {
             IconButton(
                 onClick = {
-                    // Navigate to the "cart" destination when the cart icon is clicked
                     navController.navigate("cart")
                 }
             ) {
                 Icon(Icons.Default.ShoppingCart, contentDescription = "Cart")
             }
-            IconButton(onClick = { /* Handle search click */ }) {
+            IconButton(onClick = {
+            }) {
                 Icon(Icons.Default.Menu, contentDescription = "Menu")
             }
         }

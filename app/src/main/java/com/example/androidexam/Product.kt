@@ -1,9 +1,7 @@
 package com.example.androidexam
 
-
 import kotlinx.serialization.Serializable
 import com.example.androidexam.Rating
-
 
 @Serializable
 data class Product(
@@ -15,13 +13,8 @@ data class Product(
     val image: String,
     val rating: Rating
 )
-
 data class CartItem(
     val product: Product,
     var quantity: Int
 )
 
-sealed class MenuItem {
-    object None : MenuItem()
-    object OrderHistory : MenuItem()
-}

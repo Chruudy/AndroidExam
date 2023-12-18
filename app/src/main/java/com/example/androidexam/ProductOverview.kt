@@ -37,15 +37,16 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.unit.sp
-
 
 val GoldColor = Color(255, 215, 0)
 @Composable
-fun ProductOverview(product: Product, onNavigate: () -> Unit, navController: NavHostController, cartViewModel: CartViewModel) {
+fun ProductOverview(
+    product: Product,
+    navController: NavHostController,
+    cartViewModel: CartViewModel
+) {
     var isAddedToCart by remember { mutableStateOf(false) }
     var selectedQuantity by remember { mutableIntStateOf(1) }
-
     Scaffold(topBar = { TopBar(text = "Product details", navController) }) { innerPadding ->
         Column(
             modifier = Modifier
@@ -71,17 +72,13 @@ fun ProductOverview(product: Product, onNavigate: () -> Unit, navController: Nav
                     contentDescription = "Product image"
                 )
             }
-
             Spacer(modifier = Modifier.height(16.dp))
-
             Text(
                 text = product.title,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.align(Alignment.CenterHorizontally)
             )
-
             Spacer(modifier = Modifier.height(8.dp))
-
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Center,
@@ -91,16 +88,14 @@ fun ProductOverview(product: Product, onNavigate: () -> Unit, navController: Nav
                     imageVector = Icons.Default.Star,
                     contentDescription = "Star",
                     modifier = Modifier.size(20.dp),
-                    tint = GoldColor // Use the custom gold color
+                    tint = GoldColor
                 )
                 Text(
-                    text = "${product.rating.rate.toString()} (${product.rating.count.toString()})",
+                    text = "${product.rating.rate} (${product.rating.count})",
                     modifier = Modifier.padding(start = 4.dp)
                 )
             }
-
             Spacer(modifier = Modifier.height(8.dp))
-
             Box(
                 modifier = Modifier
                     .border(
@@ -112,9 +107,7 @@ fun ProductOverview(product: Product, onNavigate: () -> Unit, navController: Nav
             ) {
                 Text(text = product.description, modifier = Modifier.padding(8.dp))
             }
-
             Spacer(modifier = Modifier.height(16.dp))
-
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.Center,
@@ -131,9 +124,9 @@ fun ProductOverview(product: Product, onNavigate: () -> Unit, navController: Nav
                         .height(40.dp)
                 ) {
                     Icon(
-                        imageVector = Icons.Default.KeyboardArrowDown, // Use the arrow down icon
+                        imageVector = Icons.Default.KeyboardArrowDown,
                         contentDescription = "Decrease",
-                        modifier = Modifier.size(24.dp) // Adjust icon size as needed
+                        modifier = Modifier.size(24.dp)
                     )
                 }
                 Text(
@@ -149,19 +142,13 @@ fun ProductOverview(product: Product, onNavigate: () -> Unit, navController: Nav
                         .height(40.dp)
                 ) {
                     Icon(
-                        imageVector = Icons.Default.KeyboardArrowUp, // Use the arrow up icon
+                        imageVector = Icons.Default.KeyboardArrowUp,
                         contentDescription = "Increase",
-                        modifier = Modifier.size(24.dp) // Adjust icon size as needed
+                        modifier = Modifier.size(24.dp)
                     )
                 }
             }
-
-
-
-
-
             Spacer(modifier = Modifier.height(16.dp))
-
             Button(
                 onClick = {
                     cartViewModel.addToCart(product, selectedQuantity)
